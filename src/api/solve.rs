@@ -68,6 +68,7 @@ pub fn convert_get_solve_error_to_reply(err: anyhow::Error) -> WithStatus<Json> 
 
 pub fn get_solve() -> impl Filter<Extract = (impl Reply,), Error = Rejection> + Clone {
     get_solve_request().and_then(move |model| async move {
+        tracing::info!("Models {:?}", model);
         let result = solve::solve(model).await;
         Result::<_, Infallible>::Ok(get_solve_response(result))
     })
